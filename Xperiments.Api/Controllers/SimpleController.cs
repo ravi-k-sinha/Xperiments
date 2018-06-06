@@ -6,9 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Xperiments.Api.Controllers
 {
+    /// <summary>
+    /// A simple controller to experiment ASP.NET features
+    /// </summary>
     [Route("api/[controller]")]
     public class SimpleController : Controller
     {
+        /// <summary>
+        /// Test Endpoint
+        /// </summary>
+        /// <returns></returns>
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
