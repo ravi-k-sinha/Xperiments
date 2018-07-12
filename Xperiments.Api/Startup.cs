@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
+using Xperiments.Middleware;
 
 namespace Xperiments.Api
 {
@@ -87,6 +88,7 @@ namespace Xperiments.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSimpleMiddleware();
             app.UseRequestLogging();
             app.UseMvc();
 
