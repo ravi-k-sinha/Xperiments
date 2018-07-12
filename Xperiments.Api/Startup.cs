@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using LendFoundry.Foundation.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ namespace Xperiments.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpServiceLogging("Xperiments");
             services.AddMvc();
 
             services.AddSwaggerGen(
@@ -85,6 +87,7 @@ namespace Xperiments.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseRequestLogging();
             app.UseMvc();
 
             app.UseSwagger(c =>
