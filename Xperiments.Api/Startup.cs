@@ -88,7 +88,7 @@ namespace Xperiments.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSimpleMiddleware();
+            app.UseRequestLoggingMiddleware();
             app.UseRequestLogging();
             app.UseMvc();
 
