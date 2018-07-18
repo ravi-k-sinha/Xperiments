@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using LendFoundry.Foundation.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +24,8 @@ namespace Xperiments.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var appVersion = typeof(Program).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+
             services.AddHttpServiceLogging("Xperiments");
             services.AddMvc(options =>
             {
@@ -36,7 +39,7 @@ namespace Xperiments.Api
                     c.SwaggerDoc("v1", new Info
                     {
                         Title = "Simple API for experiments",
-                        Version = "v1",
+                        Version = $"v1 ({appVersion})",
                         Description = "A sample API to experiment with ASP.NET features",
                         TermsOfService = "UBS Confidential",
                         Contact = new Contact
@@ -93,7 +96,7 @@ namespace Xperiments.Api
             }
 
             app.UseRequestLoggingMiddleware();
-            app.UseRequestLogging();
+            //app.UseRequestLogging();
             app.UseMvc();
 
             app.UseSwagger(c =>
