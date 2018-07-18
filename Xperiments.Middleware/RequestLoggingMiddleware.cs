@@ -22,6 +22,13 @@
         {
             _logger.Info("SimpleMiddleware.InvokeAsync()");
 
+            if (context.Request.Path.ToString().Contains("swagger.json") ||
+                context.Request.Path.ToString().Contains("api-docs"))
+            {
+                await _next(context);
+                return; // Dont log request for API documentation page
+            }
+
             var timer = Stopwatch.StartNew();
 
             _logger.Debug(await LogRequest2(context));
