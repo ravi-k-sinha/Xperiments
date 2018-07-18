@@ -24,7 +24,11 @@ namespace Xperiments.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpServiceLogging("Xperiments");
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(ResponseStandardizationFilter));
+            });
+
 
             services.AddSwaggerGen(
                 c =>

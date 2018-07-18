@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using LendFoundry.Foundation.Logging;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,8 +28,8 @@ namespace Xperiments.Api.Controllers
         public IEnumerable<string> Get()
         {
             var myvar = "value1";
-            Logger.Info("Get() called");
-            Logger.Info("Get() Exited", new { myvar});
+            //Logger.Info("Get() called");
+            //Logger.Info("Get() Exited", new { myvar});
             return new string[] { "value1", "value2" };
         }
 
@@ -38,9 +39,9 @@ namespace Xperiments.Api.Controllers
         /// <param name="sampleBody"></param>
         /// <returns></returns>
         [HttpPost("sample")]
+        [Produces("application/json")]
         public string GetBody([FromBody]SampleBody sampleBody) {
             Logger.Info("GetBody() called");
-
             Logger.Info("GetBody() received", new {sampleBody});
             return "return";
         }
@@ -70,21 +71,27 @@ namespace Xperiments.Api.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<string> Get(int id)
         {
-            return "value";
+            return await Task.Run(() => $"You passed {id}");
+            //return "A Return Value";
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<object> Post(string value)
         {
+            return await Task.Run(() => new {
+                value,
+                message = "Message from a Post endpoint. Your request was processed"
+            });
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]SampleBody value)
         {
+            return;
         }
 
         // DELETE api/values/5
