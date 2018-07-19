@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using LendFoundry.Foundation.Logging;
@@ -25,6 +26,7 @@ namespace Xperiments.Api
         public void ConfigureServices(IServiceCollection services)
         {
             var appVersion = typeof(Program).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+            Environment.SetEnvironmentVariable("APP_VERSION", appVersion, EnvironmentVariableTarget.Process);
 
             services.AddHttpServiceLogging("Xperiments");
             services.AddMvc(options =>
@@ -39,7 +41,7 @@ namespace Xperiments.Api
                     c.SwaggerDoc("v1", new Info
                     {
                         Title = "Simple API for experiments",
-                        Version = $"v1 ({appVersion})",
+                        Version = $"v1 ({Environment.GetEnvironmentVariable("APP_VERSION")})",
                         Description = "A sample API to experiment with ASP.NET features",
                         TermsOfService = "UBS Confidential",
                         Contact = new Contact
