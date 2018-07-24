@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -104,6 +105,17 @@ namespace Xperiments.Middleware
                     result = data,
                 };
             }
+            else if (data is IList)
+            {
+                var myList = (IList)data;
+                var count = ((IList)data).Count;
+                this.data = new
+                {
+                    count,
+                    result = data
+                };
+
+            }
             else
             {
                 this.data = data;
@@ -112,6 +124,13 @@ namespace Xperiments.Middleware
             this.code = 200;
             this.message = "Some dummy message";
             this.status = "success";
+        }
+
+        public bool IsList(object o)
+        {
+            return o is IList &&
+               o.GetType().IsGenericType &&
+               o.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>));
         }
     }
 }

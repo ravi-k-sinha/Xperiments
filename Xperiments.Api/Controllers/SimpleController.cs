@@ -99,6 +99,15 @@ namespace Xperiments.Api.Controllers
         public void Delete(int id)
         {
         }
+
+        [HttpGet("action-result")]
+        public async Task<IActionResult> GetActionResult()
+        {
+            return await Task.Run(async () =>
+            {
+                return this.Ok(new List<List<string>> { new List<string> { "ar1", "ar2" } , new List<string> { "ar3", "ar4" }});
+            });
+        }
     }
 
     public class SampleBody
