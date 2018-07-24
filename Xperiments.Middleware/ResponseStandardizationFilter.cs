@@ -34,7 +34,7 @@ namespace Xperiments.Middleware
 
             if (context.Result is ObjectResult result)
             {
-                var response = new StandardResponse(result.Value);
+                var response = new StandardResponse(result.Value, _logger);
                 var responseJson = JsonConvert.SerializeObject(response);
 
                 if (IsJsonContentTypeSpecified(context))
@@ -94,7 +94,7 @@ namespace Xperiments.Middleware
         public string message;
         public object data;
         
-        public StandardResponse(object data)
+        public StandardResponse(object data, ILogger logger)
         {
             if (data is Array)
             {
@@ -114,6 +114,11 @@ namespace Xperiments.Middleware
                     count,
                     result = data
                 };
+
+                foreach (var obj in myList)
+                {
+                    logger.Debug("Iterating a list: " + obj);
+                }
 
             }
             else
