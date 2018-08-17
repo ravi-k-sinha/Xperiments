@@ -4,5 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xperiments.Persistence.Common\Xperiments.Persistence.Common.csproj" />
+    <ProjectReference Include="..\Xperiments\Xperiments.csproj" />
   </ItemGroup>
 </Project>

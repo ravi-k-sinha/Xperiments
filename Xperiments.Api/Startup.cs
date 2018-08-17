@@ -5,11 +5,16 @@ using System.Reflection;
 using LendFoundry.Foundation.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using Xperiments.Middleware;
+using Xperiments.Persistence;
+using Xperiments.Persistence.Common;
+using Xperiments.Repository;
+using Xperiments.Service;
 
 namespace Xperiments.Api
 {
@@ -25,6 +30,15 @@ namespace Xperiments.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddScoped<IPersonService, PersonService>();
+            services.AddTransient<IPersonRepository, PersonRepository>();
+            
+            services.AddSingleton<IMongoConfiguration>(p =>
+                new MongoConfiguration(Settings.MongoConnectionString, Settings.MongoDatabaseName));
+            
             var appVersion = typeof(Program).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
             Environment.SetEnvironmentVariable("APP_VERSION", appVersion, EnvironmentVariableTarget.Process);
 
