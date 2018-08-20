@@ -123,8 +123,12 @@ namespace Xperiments.Api
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("simple/v1/swagger.json", "Sample API v1");
+                c.SwaggerEndpoint("../api-docs/simple/v1/swagger.json", "Sample API v1");
                 c.RoutePrefix = "api-docs"; // default is 'swagger'
+                c.DocumentTitle = "Xperiments API Documentation";
+                c.EnableFilter();
+                c.DisplayOperationId();
+                c.EnableValidator();
             });
 
         }
