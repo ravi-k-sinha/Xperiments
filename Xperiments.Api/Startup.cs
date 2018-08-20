@@ -91,6 +91,7 @@ namespace Xperiments.Api
                     c.IgnoreObsoleteProperties();
                     c.DescribeStringEnumsInCamelCase();
                     c.IgnoreObsoleteActions();
+                    c.CustomSchemaIds(x => x.FullName);
 
                     c.TagActionsBy(apiDesc => apiDesc.HttpMethod);
                     c.OrderActionsBy(apiDesc => apiDesc.RelativePath);
@@ -122,7 +123,7 @@ namespace Xperiments.Api
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/api-docs/simple/v1/swagger.json", "Sample API v1");
+                c.SwaggerEndpoint("simple/v1/swagger.json", "Sample API v1");
                 c.RoutePrefix = "api-docs"; // default is 'swagger'
             });
 
