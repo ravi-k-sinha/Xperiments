@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
+using MongoDB.Bson.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.ReDoc;
 using Xperiments.Middleware;
 using Xperiments.Persistence;
 using Xperiments.Persistence.Common;
@@ -30,6 +32,8 @@ namespace Xperiments.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            BsonSerializer.RegisterSerializationProvider(new MyProvider());
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -92,12 +96,14 @@ namespace Xperiments.Api
                     c.DescribeStringEnumsInCamelCase();
                     c.IgnoreObsoleteActions();
                     c.CustomSchemaIds(x => x.FullName);
-
+                    
                     c.TagActionsBy(apiDesc => apiDesc.HttpMethod);
                     c.OrderActionsBy(apiDesc => apiDesc.RelativePath);
 
                     var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Xperiments.Api.xml");
                     c.IncludeXmlComments(filePath);
+
+                    
                 }
             );
 
@@ -116,12 +122,17 @@ namespace Xperiments.Api
             //app.UseRequestLogging();
             app.UseMvc();
 
+            var virtualBasePathSegment = Environment.GetEnvironmentVariable("SWAGGER_VIRTUAL_BASEPATH_SEGMENT");
             app.UseSwagger(c =>
             {
                 c.RouteTemplate = "api-docs/simple/{documentName}/swagger.json";
+                c.PreSerializeFilters.Add((swagger, httpReq) =>
+                {
+                    swagger.BasePath = virtualBasePathSegment;
+                });
             });
-
-            app.UseSwaggerUI(c =>
+            
+            /*app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("../api-docs/simple/v1/swagger.json", "Sample API v1");
                 c.RoutePrefix = "api-docs"; // default is 'swagger'
@@ -129,8 +140,15 @@ namespace Xperiments.Api
                 c.EnableFilter();
                 c.DisplayOperationId();
                 c.EnableValidator();
-            });
+            });*/
+            
+            app.UseReDoc(c =>
+            {
+                c.RoutePrefix = "api-docs";
 
+                c.SpecUrl = "simple/v1/swagger.json";
+                c.DocumentTitle = "Xperiments API Documentation";
+            });
         }
     }
 }

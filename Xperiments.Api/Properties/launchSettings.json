@@ -13,7 +13,8 @@
       "launchBrowser": true,
       "launchUrl": "api/simple",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SWAGGER_VIRTUAL_BASEPATH_SEGMENT": "/v1/service-name"
       }
     },
     "Xperiments.Api": {
@@ -21,7 +22,8 @@
       "launchBrowser": true,
       "launchUrl": "api/simple",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SWAGGER_VIRTUAL_BASEPATH_SEGMENT": "/v1/service-name"
       },
       "applicationUrl": "http://localhost:5000/"
     }
