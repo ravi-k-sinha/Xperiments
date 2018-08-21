@@ -132,7 +132,7 @@ namespace Xperiments.Api
                 });
             });
             
-            /*app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("../api-docs/simple/v1/swagger.json", "Sample API v1");
                 c.RoutePrefix = "api-docs"; // default is 'swagger'
@@ -140,15 +140,15 @@ namespace Xperiments.Api
                 c.EnableFilter();
                 c.DisplayOperationId();
                 c.EnableValidator();
-            });*/
+            });
             
-            app.UseReDoc(c =>
+            /*app.UseReDoc(c =>
             {
                 c.RoutePrefix = "api-docs";
 
                 c.SpecUrl = "simple/v1/swagger.json";
                 c.DocumentTitle = "Xperiments API Documentation";
-            });
+            });*/
         }
     }
 }
