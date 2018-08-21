@@ -17,8 +17,8 @@ namespace Xperiments.Persistence.Common
                                                             where C : PersistenceAggregate, T
     {
 
-        protected readonly IMongoCollection<T> MongoCollection;
-        
+        public IMongoCollection<T> MongoCollection { get; set; }
+
         // TODO: Purpose of this collection is not fully clear
         private static readonly ConcurrentDictionary<string, IMongoCollection<T>> MongoCollections
             = new ConcurrentDictionary<string, IMongoCollection<T>>();
@@ -48,6 +48,7 @@ namespace Xperiments.Persistence.Common
 
             if (MongoCollections.TryGetValue(key, out var tempCollection))
             {
+                MongoCollection = tempCollection;
                 return;
             }
             
