@@ -91,11 +91,12 @@ namespace Xperiments.Persistence.Common
         }
 
         // Ideally tenant id will be available via a service or another facility, and for the same a predicate will be added
-        private IMongoQueryable<T> Query => MongoCollection.AsQueryable();
+        protected IMongoQueryable<T> Query => MongoCollection.AsQueryable();
 
         public async Task<T> Get(string id)
         {
-            return await Query.FirstOrDefaultAsync(i => i.Id == id);
+            var result = await Query.FirstOrDefaultAsync(i => i.Id == id);
+            return result;
         }
 
         public async Task<IEnumerable<T>> All(Expression<Func<T, bool>> query, int? skip = null, int? quantity = null)
@@ -118,6 +119,7 @@ namespace Xperiments.Persistence.Common
         public void Add(T item)
         {
             EnsureNotNull(item);
+            GenerateMultilingualSkeleton(item);
 
             item.Id = ObjectId.GenerateNewId().ToString();
             item.TenantId = "TBD"; // Ideally Tenant Id should be retrieved from a service
@@ -154,6 +156,44 @@ namespace Xperiments.Persistence.Common
             if (item == null)
             {
                 throw new ArgumentNullException(nameof(item));
+            }
+        }
+
+        private static void GenerateMultilingualSkeleton(T item)
+        {
+            if (! (typeof(ISupportsMultilingualData).IsAssignableFrom(typeof(T)) && 
+                   typeof(ISupportsMeta).IsAssignableFrom(typeof(T)))
+            )
+            {
+                return;
+            }
+            
+            var props = typeof(T).GetProperties().Where(
+                prop => Attribute.IsDefined(prop, typeof(MultilingualPropertyAttribute)));
+
+            var metaItem = (ISupportsMeta) item;
+            var transDocVal = new BsonDocument();
+            var transDoc = new BsonDocument("Translations", transDocVal);
+            
+            if (metaItem.Meta == null)
+            {
+                metaItem.Meta = transDoc;
+            }
+            else
+            {
+                var found = metaItem.Meta.TryGetElement("Translations", out var transElem);
+
+                if (found)
+                {
+                    throw new InvalidOperationException("'Translations' element must not be already present");
+                }
+
+                metaItem.Meta.AddRange(transDoc);
+            }
+
+            foreach (var mlProp in props)
+            {
+                transDocVal[mlProp.Name] = new BsonDocument(); // Initialize with empty doc for each multilingual property
             }
         }
     }

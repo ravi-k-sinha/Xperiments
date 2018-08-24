@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Xperiments.Persistence;
 using Xperiments.Persistence.Common;
 
 namespace Xperiments.Models
@@ -7,11 +8,12 @@ namespace Xperiments.Models
     /// <summary>
     /// Describes a person with few attributes
     /// </summary>
-    public interface IPerson : IPersistenceAggregate
+    public interface IPerson : IPersistenceAggregate, ISupportsMeta, ISupportsMultilingualData
     {
         /// <summary>
         /// Name of the person
         /// </summary>
+        [MultilingualProperty]
         string Name { get; set; }
         
         /// <summary>
@@ -39,5 +41,11 @@ namespace Xperiments.Models
         /// A person may have zero or more animals as pets
         /// </summary>
         List<Cat> Cats { get; set; }
+        
+        /// <summary>
+        /// General remarks about this person
+        /// </summary>
+        [MultilingualProperty]
+        string Remarks { get; set; }
     }
 }

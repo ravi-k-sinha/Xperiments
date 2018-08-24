@@ -25,6 +25,11 @@ namespace Xperiments.Service
         {
             return await PersonRepository.Get(id);
         }
+        
+        public async Task<IPerson> GetByLocale(string id, string locale)
+        {
+            return await PersonRepository.GetByLocale(id, locale);
+        }
 
         public async Task<List<IPerson>> GetByName(string name)
         {
@@ -36,6 +41,24 @@ namespace Xperiments.Service
             return Task.Run(() =>
             {
                 PersonRepository.Add(person);
+                return true;
+            });
+        }
+
+        public Task<bool> Update(IPerson person)
+        {
+            return Task.Run(() =>
+            {
+                PersonRepository.Update(person);
+                return true;
+            });
+        }
+
+        public Task<bool> Delete(string id)
+        {
+            return Task.Run(async () =>
+            {
+                PersonRepository.Remove(await PersonRepository.Get(id));
                 return true;
             });
         }

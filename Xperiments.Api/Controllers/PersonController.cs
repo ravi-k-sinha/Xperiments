@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using LendFoundry.Foundation.Logging;
+using MongoDB.Bson;
 using Xperiments.Models;
+using Xperiments.Persistence;
 using Xperiments.Service;
 
 namespace Xperiments.Api.Controllers
@@ -26,6 +28,49 @@ namespace Xperiments.Api.Controllers
         {
             return await Task.Run(async () => 
                 Ok(PersonService.Add(person))
+            );
+        }
+
+        [HttpPut]
+        [Consumes("application/json")]
+        public async Task<IActionResult> Update([FromBody] Person person)
+        {
+            return await Task.Run(async () => 
+                Ok(PersonService.Update(person))
+            );
+        }
+
+        [HttpGet("{id}")]
+        [Produces("application/json")]
+        public async Task<IPerson> Get([FromRoute] string id, [FromQuery] string locale)
+        {
+            return await Task.Run(async () =>
+                {
+                    if (! string.IsNullOrWhiteSpace(locale))
+                    {
+                        return await PersonService.GetByLocale(id, locale);
+                    }
+
+                    return await PersonService.Get(id);
+                }
+            );
+        }
+        
+        [HttpGet]
+        [Produces("application/json")]
+        public async Task<List<IPerson>> Get()
+        {
+            return await Task.Run(async () => 
+                await PersonService.GetAll()
+            );
+        }
+        
+        [HttpDelete("{id}")]
+        [Produces("application/json")]
+        public async Task<bool> Delete([FromRoute] string id)
+        {
+            return await Task.Run(async () => 
+                await PersonService.Delete(id)
             );
         }
     }

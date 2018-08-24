@@ -21,6 +21,15 @@ namespace Xperiments.Service
         Task<IPerson> Get(string id);
 
         /// <summary>
+        /// Returns a person whose id matched the input. Attributes which are multilingual will only have specified
+        /// language or the default language
+        /// </summary>
+        /// <param name="id">The id to match</param>
+        /// <param name="locale">The locale in which translations need to be loaded</param>
+        /// <returns>Matched person</returns>
+        Task<IPerson> GetByLocale(string id, string locale);
+
+        /// <summary>
         /// Returns all persons whose name match fully or partially the given input
         /// </summary>
         /// <param name="name">The name to be matched</param>
@@ -33,5 +42,19 @@ namespace Xperiments.Service
         /// <param name="person">The person to be added</param>
         /// <returns><code>true</code> if created successfully</returns>
         Task<bool> Add(IPerson person);
+
+        /// <summary>
+        /// Updates an existing person with new representation
+        /// </summary>
+        /// <param name="person">The person to be updated</param>
+        /// <returns><code>true</code> if created successfully</returns>
+        Task<bool> Update(IPerson person);
+        
+        /// <summary>
+        /// Deletes an existing person
+        /// </summary>
+        /// <param name="id">The id of person to be deleted</param>
+        /// <returns><code>true</code> if created successfully</returns>
+        Task<bool> Delete(string id);
     }
 }
