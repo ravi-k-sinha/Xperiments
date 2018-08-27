@@ -48,23 +48,25 @@ namespace Xperiments.Persistence
 
         public async Task<bool> AddTranslation(string id, MultilingualDataRequest request)
         {
-            // TODO Complete implementation
-            
-            /*get the person with id
-            get Meta, and extract translation
-            find the property name, if not there then exception
-            if property is present, then check if language is present
-            if language is present edit, otherwise add
-            save the person object
-            
-            2nd approach, explore how through native queries, data can be updated
-            */
-
             var person = await Get(id);
 
             var translations = person.Meta["Translations"].AsBsonDocument;
             
             translations[request.PropertyName].AsBsonDocument[request.Language] = new BsonDocument("Value", request.Translation);
+            
+            Update(person);
+
+            return true;
+        }
+
+        public async Task<bool> UpdateTranslation(string id, MultilingualDataRequest request)
+        {
+            var person = await Get(id);
+
+            var target = person.Meta["Translations"].AsBsonDocument[request.PropertyName]
+                .AsBsonDocument[request.Language];
+
+            target["Value"] = request.Translation;
             
             Update(person);
 

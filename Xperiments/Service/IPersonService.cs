@@ -63,7 +63,15 @@ namespace Xperiments.Service
         /// </summary>
         /// <param name="id">Id of the person in which translation need to be added</param>
         /// <param name="request">Details of translation to be added</param>
-        /// <returns></returns>
+        /// <returns><code>true</code> if added successfully</returns>
         Task<bool> AddTranslation(string id, MultilingualDataRequest request);
+
+        /// <summary>
+        /// Updates an existing translation for an existing property in the object
+        /// </summary>
+        /// <param name="id">Id of the person in which translation needs to be updated</param>
+        /// <param name="request">Details of translation to be updated</param>
+        /// <returns><code>true</code> if updated successfully</returns>
+        Task<bool> UpdateTranslation(string id, MultilingualDataRequest request);
     }
 }

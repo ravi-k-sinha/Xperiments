@@ -81,5 +81,12 @@ namespace Xperiments.Api.Controllers
                 await PersonService.AddTranslation(id, request)
             );
         }
+
+        [HttpPut("{id}/translation")]
+        public async Task<bool> UpdateTranslation([FromRoute] string id, [FromBody] MultilingualDataRequest request)
+        {
+            return await Task.Run(async () =>
+                await PersonService.UpdateTranslation(id, request));
+        }
     }
 }

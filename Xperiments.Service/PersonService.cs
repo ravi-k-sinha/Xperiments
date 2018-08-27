@@ -72,5 +72,14 @@ namespace Xperiments.Service
                 return true;
             });
         }
+
+        public Task<bool> UpdateTranslation(string id, MultilingualDataRequest request)
+        {
+            return Task.Run(async () =>
+            {
+                await PersonRepository.UpdateTranslation(id, request);
+                return true;
+            });
+        }
     }
 }
