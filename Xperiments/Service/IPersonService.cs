@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xperiments.Models;
+using Xperiments.Persistence.Common.Multilingual;
 
 namespace Xperiments.Service
 {
@@ -56,5 +57,13 @@ namespace Xperiments.Service
         /// <param name="id">The id of person to be deleted</param>
         /// <returns><code>true</code> if created successfully</returns>
         Task<bool> Delete(string id);
+
+        /// <summary>
+        /// Adds a translation for an existing property in the object
+        /// </summary>
+        /// <param name="id">Id of the person in which translation need to be added</param>
+        /// <param name="request">Details of translation to be added</param>
+        /// <returns></returns>
+        Task<bool> AddTranslation(string id, MultilingualDataRequest request);
     }
 }

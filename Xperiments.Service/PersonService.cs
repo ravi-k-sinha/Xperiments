@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xperiments.Models;
+using Xperiments.Persistence.Common.Multilingual;
 using Xperiments.Repository;
 
 namespace Xperiments.Service
@@ -59,6 +60,15 @@ namespace Xperiments.Service
             return Task.Run(async () =>
             {
                 PersonRepository.Remove(await PersonRepository.Get(id));
+                return true;
+            });
+        }
+
+        public Task<bool> AddTranslation(string id, MultilingualDataRequest request)
+        {
+            return Task.Run(async () =>
+            {
+                await PersonRepository.AddTranslation(id, request);
                 return true;
             });
         }

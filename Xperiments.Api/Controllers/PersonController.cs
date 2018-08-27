@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using LendFoundry.Foundation.Logging;
-using MongoDB.Bson;
 using Xperiments.Models;
-using Xperiments.Persistence;
+using Xperiments.Persistence.Common.Multilingual;
 using Xperiments.Service;
 
 namespace Xperiments.Api.Controllers
@@ -71,6 +70,15 @@ namespace Xperiments.Api.Controllers
         {
             return await Task.Run(async () => 
                 await PersonService.Delete(id)
+            );
+        }
+
+        [HttpPost("{id}/translation")]
+        [Produces("application/json")]
+        public async Task<bool> AddTranslation([FromRoute]string id, [FromBody] MultilingualDataRequest request)
+        {
+            return await Task.Run(async () => 
+                await PersonService.AddTranslation(id, request)
             );
         }
     }
