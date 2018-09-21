@@ -5,4 +5,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Xperiments\Xperiments.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.6" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.24" />
+  </ItemGroup>
 </Project>
