@@ -1,25 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using LendFoundry.Foundation.Logging;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
-using MongoDB.Bson.Serialization;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.ReDoc;
-using Xperiments.Middleware;
-using Xperiments.Persistence;
-using Xperiments.Persistence.Common;
-using Xperiments.Repository;
-using Xperiments.Service;
-
-namespace Xperiments.Api
+﻿namespace Xperiments.Api
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
+    using Amazon.S3;
+    using LendFoundry.Foundation.Logging;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.PlatformAbstractions;
+    using Middleware;
+    using MongoDB.Bson.Serialization;
+    using Persistence;
+    using Persistence.Common;
+    using Repository;
+    using Service;
+    using Swashbuckle.AspNetCore.Swagger;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -42,6 +42,8 @@ namespace Xperiments.Api
             
             services.AddSingleton<IMongoConfiguration>(p =>
                 new MongoConfiguration(Settings.MongoConnectionString, Settings.MongoDatabaseName));
+
+            AddS3Dependencies(services);
             
             var appVersion = typeof(Program).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
             Environment.SetEnvironmentVariable("APP_VERSION", appVersion, EnvironmentVariableTarget.Process);
@@ -108,6 +110,13 @@ namespace Xperiments.Api
             );
 
 
+        }
+
+        private void AddS3Dependencies(IServiceCollection services)
+        {
+            services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+            services.AddSingleton<IS3Service, S3Service>();
+            services.AddAWSService<IAmazonS3>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
