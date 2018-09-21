@@ -61,9 +61,9 @@ namespace Xperiments.Api.Controllers
             {
                 var v = 34 / zero;
             }
-            catch (Exception e) {
+            catch (System.Exception e) {
                 Logger.Error("Caught an exception", e);
-                throw e;
+                throw;
             }
 
             return "Boom";

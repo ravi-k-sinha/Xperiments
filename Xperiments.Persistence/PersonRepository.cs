@@ -1,16 +1,17 @@
-﻿using System.Reflection;
-using System.Threading.Tasks;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-using Xperiments.Models;
-using Xperiments.Persistence.Common;
-using Xperiments.Persistence.Common.Multilingual;
-using Xperiments.Repository;
-
-namespace Xperiments.Persistence
+﻿namespace Xperiments.Persistence
 {
+    using System;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using Common;
+    using Common.Multilingual;
+    using Models;
+    using MongoDB.Bson;
+    using MongoDB.Bson.Serialization;
+    using MongoDB.Driver;
+    using MongoDB.Driver.Linq;
+    using Repository;
+
     public class PersonRepository : BaseMongoRepository<IPerson, Person>, IPersonRepository
     {
 
@@ -63,11 +64,17 @@ namespace Xperiments.Persistence
         {
             var person = await Get(id);
 
-            var target = person.Meta["Translations"].AsBsonDocument[request.PropertyName]
-                .AsBsonDocument[request.Language];
+            try
+            {
+                person.Meta["Translations"].AsBsonDocument[request.PropertyName]
+                    .AsBsonDocument[request.Language]["Value"] = request.Translation;
+            }
+            catch (Exception e)
+            {
+                throw new TranslationTargetException("Translation target to update was not found. Msg: " + e.Message, e);
+            }
 
-            target["Value"] = request.Translation;
-            
+            // TODO Use UpdateDefinition, so that only targeted field is updated
             Update(person);
 
             return true;

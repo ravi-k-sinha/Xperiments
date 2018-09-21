@@ -83,10 +83,16 @@ namespace Xperiments.Api.Controllers
         }
 
         [HttpPut("{id}/translation")]
-        public async Task<bool> UpdateTranslation([FromRoute] string id, [FromBody] MultilingualDataRequest request)
+        public async Task<IActionResult> UpdateTranslation([FromRoute] string id, [FromBody] MultilingualDataRequest request)
         {
-            return await Task.Run(async () =>
-                await PersonService.UpdateTranslation(id, request));
+            try
+            {
+                return await Task.Run(async () => Ok(await PersonService.UpdateTranslation(id, request)));
+            }
+            catch (TranslationTargetException tte)
+            {
+                return BadRequest(tte.Message);
+            }
         }
     }
 }
