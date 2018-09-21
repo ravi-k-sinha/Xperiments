@@ -1,0 +1,6 @@
+S3 credentials can be specified, among other options, in user home directory in a file called 
+'credentials' in a folder '.aws'. The contents of the file look like below
+
+[test-profile]  ** Name of the profile, this is specified in the app settings **
+aws_access_key_id = AN-ACCESS-KEY ** Obtained from AWS after creating credentials **
+aws_secret_access_key = secret-access-key-longstring
