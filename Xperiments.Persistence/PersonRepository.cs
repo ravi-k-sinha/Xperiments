@@ -74,7 +74,7 @@
                 throw new TranslationTargetException("Translation target to update was not found. Msg: " + e.Message, e);
             }
 
-            // TODO Use UpdateDefinition, so that only targeted field is updated
+            // TODO Use UpdateDefinition, so that only targeted field is sent for update, not the whole object
             Update(person);
 
             return true;

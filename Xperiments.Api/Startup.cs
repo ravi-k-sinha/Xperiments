@@ -16,6 +16,7 @@
     using MongoDB.Bson.Serialization;
     using Persistence;
     using Persistence.Common;
+    using Prometheus;
     using Repository;
     using Service;
     using Swashbuckle.AspNetCore.Swagger;
@@ -126,7 +127,7 @@
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseMetricServer();
             app.UseRequestLoggingMiddleware();
             //app.UseRequestLogging();
             app.UseMvc();
